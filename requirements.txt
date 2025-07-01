@@ -555,7 +555,6 @@ tokenizers==0.21.2
 toml==0.10.2
 tomlkit==0.13.3
 toolz==0.12.1
-torch @ https://download.pytorch.org/whl/cu124/torch-2.6.0%2Bcu124-cp311-cp311-linux_x86_64.whl
 torchao==0.10.0
 torchaudio @ https://download.pytorch.org/whl/cu124/torchaudio-2.6.0%2Bcu124-cp311-cp311-linux_x86_64.whl
 torchdata==0.11.0
