@@ -12,10 +12,6 @@ import requests
 # No more pyngrok import needed for production deployment
 import traceback # ADD THIS LINE
 
-import boxsdk
-print(f"DEBUG: boxsdk version: {boxsdk.__version__}") # Keep this line early in your app.py
-
-
 app = Flask(__name__)
 
 # --- Configuration (Load from Environment Variables) ---
@@ -220,10 +216,12 @@ def initialize_box_client(jwt_config):
         auth = None # Initialize to None for clearer debugging
         if 'enterpriseID' in jwt_config and jwt_config['enterpriseID']:
             auth_params['enterprise_id'] = jwt_config['enterpriseID']
-            auth = JWTAuth(**auth_params)
+            print(f"DEBUG: JWTAuth repr: {repr(JWTAuth)}")
+            auth = boxsdk.JWTAuth(**auth_params)
         elif 'userID' in jwt_config and jwt_config['userID']:
             auth_params['user_id'] = jwt_config['userID']
-            auth = JWTAuth(**auth_params)
+            print(f"DEBUG: JWTAuth repr: {repr(JWTAuth)}")
+            auth = boxsdk.JWTAuth(**auth_params)
         else:
             raise ValueError("Neither 'enterpriseID' nor 'userID' found in BOX_JWT_CONFIG. Cannot determine authentication type.")
 
