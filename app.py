@@ -12,8 +12,11 @@ import requests
 # No more pyngrok import needed for production deployment
 import traceback # ADD THIS LINE
 
-app = Flask(__name__)
+import boxsdk
 print(f"DEBUG: boxsdk version: {boxsdk.__version__}") # Keep this line early in your app.py
+
+
+app = Flask(__name__)
 
 # --- Configuration (Load from Environment Variables) ---
 # These variables will hold the secrets loaded from environment variables.
