@@ -210,17 +210,17 @@ def initialize_box_client(jwt_config):
         }
 
         print(f"DEBUG: Auth parameters prepared. Calling JWTAuth with enterpriseID: {jwt_config.get('enterpriseID')}, userID: {jwt_config.get('userID')}")
-        print(f"DEBUG: Type of JWTAuth (before call): {type(JWTAuth)}")
-        print(f"DEBUG: Is JWTAuth callable (before call)? {callable(JWTAuth)}")
+        print(f"DEBUG: Type of JWTAuth (before call): {type(boxsdk.JWTAuth)}")
+        print(f"DEBUG: Is JWTAuth callable (before call)? {callable(boxsdk.JWTAuth)}")
 
         auth = None # Initialize to None for clearer debugging
         if 'enterpriseID' in jwt_config and jwt_config['enterpriseID']:
             auth_params['enterprise_id'] = jwt_config['enterpriseID']
-            print(f"DEBUG: JWTAuth repr: {repr(JWTAuth)}")
+            print(f"DEBUG: JWTAuth repr: {repr(boxsdk.JWTAuth)}")
             auth = boxsdk.JWTAuth(**auth_params)
         elif 'userID' in jwt_config and jwt_config['userID']:
             auth_params['user_id'] = jwt_config['userID']
-            print(f"DEBUG: JWTAuth repr: {repr(JWTAuth)}")
+            print(f"DEBUG: JWTAuth repr: {repr(boxsdk.JWTAuth)}")
             auth = boxsdk.JWTAuth(**auth_params)
         else:
             raise ValueError("Neither 'enterpriseID' nor 'userID' found in BOX_JWT_CONFIG. Cannot determine authentication type.")
