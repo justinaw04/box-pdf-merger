@@ -10,6 +10,7 @@ from boxsdk import JWTAuth, Client
 from io import BytesIO
 import requests
 # No more pyngrok import needed for production deployment
+import traceback # ADD THIS LINE
 
 app = Flask(__name__)
 
@@ -227,6 +228,8 @@ def initialize_box_client(jwt_config):
         return Client(auth)
     except Exception as e:
         print(f"DEBUG: Exception caught inside initialize_box_client: {e}")
+        print("DEBUG: Full traceback:")
+        traceback.print_exc() # THIS WILL PRINT THE FULL TRACEBACK TO STDOUT/STDERR
         raise # Re-raise to be caught by the Flask route
 
 # ... (rest of your app.py code) ...
