@@ -13,6 +13,7 @@ import requests
 import traceback # ADD THIS LINE
 
 app = Flask(__name__)
+print(f"DEBUG: boxsdk version: {boxsdk.__version__}") # Keep this line early in your app.py
 
 # --- Configuration (Load from Environment Variables) ---
 # These variables will hold the secrets loaded from environment variables.
@@ -228,8 +229,8 @@ def initialize_box_client(jwt_config):
         return Client(auth)
     except Exception as e:
         print(f"DEBUG: Exception caught inside initialize_box_client: {e}")
-        print("DEBUG: Full traceback:")
-        traceback.print_exc() # THIS WILL PRINT THE FULL TRACEBACK TO STDOUT/STDERR
+        print("DEBUG: Full traceback:")'full_trace = traceback.format_exc()
+        print(f"{full_trace}") # Print the formatted traceback string directly
         raise # Re-raise to be caught by the Flask route
 
 # ... (rest of your app.py code) ...
