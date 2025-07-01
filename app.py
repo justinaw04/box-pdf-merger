@@ -214,6 +214,8 @@ def initialize_box_client(jwt_config):
         }
 
         print(f"DEBUG: Auth parameters prepared. Calling JWTAuth with enterpriseID: {jwt_config.get('enterpriseID')}, userID: {jwt_config.get('userID')}")
+        print(f"DEBUG: Type of JWTAuth (before call): {type(JWTAuth)}")
+        print(f"DEBUG: Is JWTAuth callable (before call)? {callable(JWTAuth)}")
 
         auth = None # Initialize to None for clearer debugging
         if 'enterpriseID' in jwt_config and jwt_config['enterpriseID']:
