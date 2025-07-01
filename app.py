@@ -229,8 +229,9 @@ def initialize_box_client(jwt_config):
         return Client(auth)
     except Exception as e:
         print(f"DEBUG: Exception caught inside initialize_box_client: {e}")
-        print("DEBUG: Full traceback:")'full_trace = traceback.format_exc()
-        print(f"{full_trace}") # Print the formatted traceback string directly
+        print("DEBUG: Full traceback:")
+        full_trace = traceback.format_exc()
+        print(f"{full_trace}")
         raise # Re-raise to be caught by the Flask route
 
 # ... (rest of your app.py code) ...
