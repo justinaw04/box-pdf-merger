@@ -6,9 +6,9 @@ from flask import Flask, request, jsonify, render_template_string, redirect, url
 import os
 import json
 import time
-from boxsdk import JWTAuth, Client
 from io import BytesIO
 import requests
+import boxsdk
 # No more pyngrok import needed for production deployment
 import traceback # ADD THIS LINE
 
