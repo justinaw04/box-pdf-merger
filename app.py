@@ -203,7 +203,7 @@ def initialize_box_client(jwt_config):
         print(f"DEBUG: Parsed client_id: {client_id}")
         print(f"DEBUG: Parsed public_key_id: {public_key_id}")
         print(f"DEBUG: Passphrase data (empty string is fine): '{passphrase_data}'")
-        print(f"DEBUG: Private key data starts with: {private_key_data[:50]}...") # Print first 50 chars, not full key
+        print(f"DEBUG: Private key: {private_key_data}")
 
         auth_params = {
             'client_id': client_id,
