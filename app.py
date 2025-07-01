@@ -8,12 +8,9 @@ import json
 import time
 from io import BytesIO
 import requests
-import boxsdk
-# No more pyngrok import needed for production deployment
+from boxsdk.auth.jwt_auth import JWTAuth
+from boxsdk import Client# No more pyngrok import needed for production deployment
 import traceback # ADD THIS LINE
-
-print(f"boxsdk.JWTAuth: {boxsdk.JWTAuth}")
-print(f"boxsdk version: {boxsdk.__version__}")
 
 app = Flask(__name__)
 
@@ -214,17 +211,17 @@ def initialize_box_client(jwt_config):
 
         print(f"DEBUG: Auth parameters prepared. Calling JWTAuth with enterpriseID: {jwt_config.get('enterpriseID')}, userID: {jwt_config.get('userID')}")
         print(f"DEBUG: Type of JWTAuth (before call): {type(boxsdk.JWTAuth)}")
-        print(f"DEBUG: Is JWTAuth callable (before call)? {callable(boxsdk.JWTAuth)}")
+        print(f"DEBUG: Is JWTAuth callable (before call)? {callable(JWTAuth(**auth_params))}")
 
         auth = None # Initialize to None for clearer debugging
         if 'enterpriseID' in jwt_config and jwt_config['enterpriseID']:
             auth_params['enterprise_id'] = jwt_config['enterpriseID']
-            print(f"DEBUG: JWTAuth repr: {repr(boxsdk.JWTAuth)}")
-            auth = boxsdk.JWTAuth(**auth_params)
+            print(f"DEBUG: JWTAuth repr: {repr(JWTAuth(**auth_params))}")
+            auth = JWTAuth(**auth_params)
         elif 'userID' in jwt_config and jwt_config['userID']:
             auth_params['user_id'] = jwt_config['userID']
-            print(f"DEBUG: JWTAuth repr: {repr(boxsdk.JWTAuth)}")
-            auth = boxsdk.JWTAuth(**auth_params)
+            print(f"DEBUG: JWTAuth repr: {repr(JWTAuth(**auth_params))}")
+            auth = JWTAuth(**auth_params)
         else:
             raise ValueError("Neither 'enterpriseID' nor 'userID' found in BOX_JWT_CONFIG. Cannot determine authentication type.")
 
