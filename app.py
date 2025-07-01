@@ -12,6 +12,9 @@ import boxsdk
 # No more pyngrok import needed for production deployment
 import traceback # ADD THIS LINE
 
+print(f"boxsdk.JWTAuth: {boxsdk.JWTAuth}")
+print(f"boxsdk version: {boxsdk.__version__}")
+
 app = Flask(__name__)
 
 # --- Configuration (Load from Environment Variables) ---
