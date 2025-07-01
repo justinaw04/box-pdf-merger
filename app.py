@@ -176,10 +176,18 @@ HTML_TEMPLATE = """
 
 # --- Box API Helper Functions ---
 
+# ... (your existing app.py code) ...
+
 def initialize_box_client(jwt_config):
-    """
-    Initializes and returns a Box Client object using JWT authentication.
-    """
+    # These prints will appear in your Render logs
+    print(f"DEBUG: Entering initialize_box_client. Received jwt_config type: {type(jwt_config)}")
+    if jwt_config:
+        print(f"DEBUG: jwt_config keys: {list(jwt_config.keys())}")
+        if 'boxAppSettings' in jwt_config:
+            print(f"DEBUG: boxAppSettings keys: {list(jwt_config['boxAppSettings'].keys())}")
+            if 'appAuth' in jwt_config['boxAppSettings']:
+                print(f"DEBUG: appAuth keys: {list(jwt_config['boxAppSettings']['appAuth'].keys())}")
+
     try:
         client_id = jwt_config['boxAppSettings']['clientID']
         client_secret = jwt_config['boxAppSettings']['clientSecret']
@@ -187,31 +195,41 @@ def initialize_box_client(jwt_config):
         private_key_data = jwt_config['boxAppSettings']['appAuth']['privateKey']
         passphrase_data = jwt_config['boxAppSettings']['appAuth'].get('passphrase')
 
+        print(f"DEBUG: Parsed client_id: {client_id}")
+        print(f"DEBUG: Parsed public_key_id: {public_key_id}")
+        print(f"DEBUG: Passphrase data (empty string is fine): '{passphrase_data}'")
+        print(f"DEBUG: Private key data starts with: {private_key_data[:50]}...") # Print first 50 chars, not full key
+
+        auth_params = {
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'jwt_key_id': public_key_id,
+            'rsa_private_key_data': private_key_data.encode('utf-8'),
+            'rsa_private_key_passphrase': passphrase_data.encode('utf-8') if passphrase_data else None
+        }
+
+        print(f"DEBUG: Auth parameters prepared. Calling JWTAuth with enterpriseID: {jwt_config.get('enterpriseID')}, userID: {jwt_config.get('userID')}")
+
+        auth = None # Initialize to None for clearer debugging
         if 'enterpriseID' in jwt_config and jwt_config['enterpriseID']:
-            auth = JWTAuth(
-                client_id=client_id,
-                client_secret=client_secret,
-                jwt_key_id=public_key_id,
-                rsa_private_key_data=private_key_data.encode('utf-8'),
-                rsa_private_key_passphrase=passphrase_data.encode('utf-8') if passphrase_data else None,
-                enterprise_id=jwt_config['enterpriseID']
-            )
+            auth_params['enterprise_id'] = jwt_config['enterpriseID']
+            auth = JWTAuth(**auth_params)
         elif 'userID' in jwt_config and jwt_config['userID']:
-            auth = JWTAuth(
-                client_id=client_id,
-                client_secret=client_secret,
-                jwt_key_id=public_key_id,
-                rsa_private_key_data=private_key_data.encode('utf-8'),
-                rsa_private_key_passphrase=passphrase_data.encode('utf-8') if passphrase_data else None,
-                user_id=jwt_config['userID']
-            )
+            auth_params['user_id'] = jwt_config['userID']
+            auth = JWTAuth(**auth_params)
         else:
             raise ValueError("Neither 'enterpriseID' nor 'userID' found in BOX_JWT_CONFIG. Cannot determine authentication type.")
 
+        if auth is None: # Added check
+            raise RuntimeError("JWTAuth object failed to initialize and is None.")
+
+        print("DEBUG: JWTAuth object created successfully. Attempting to create Client object...")
         return Client(auth)
     except Exception as e:
-        print(f"Error initializing Box client: {e}")
-        raise # Re-raise to be caught by the calling endpoint
+        print(f"DEBUG: Exception caught inside initialize_box_client: {e}")
+        raise # Re-raise to be caught by the Flask route
+
+# ... (rest of your app.py code) ...
 
 def list_pdf_files_in_box_folder(client, folder_id):
     """
